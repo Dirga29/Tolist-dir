@@ -8,7 +8,7 @@ $password = "";
 $dbname = "todo_list";
 
 // Create connection
-$conn = new mysqli($servername, $username, $password);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
@@ -218,7 +218,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : (isset($_SESSION['user_id']) ? 'd
         </div>
         <?php if ($page == 'dashboard'): ?>
         <div class="search-bar">
-            <input type="text" placeholder="Search...">
+            <input type="text" name="search" placeholder="Cari tugas..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
         </div>
         <?php endif; ?>
         <div class="title">Mari To list</div>

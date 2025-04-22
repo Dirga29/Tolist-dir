@@ -3,6 +3,68 @@
         var editModal = document.getElementById("editModal");
         var deleteModal = document.getElementById("deleteModal");
         
+        // Get the search input
+        var searchInput = document.querySelector('input[name="search"]');
+        var searchTimeout;
+        
+        // Add event listener for search input
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function() {
+                    searchTasks(searchInput.value);
+                }, 500); // Delay for 500ms after user stops typing
+            });
+        }
+        
+        // Function to perform AJAX search
+        function searchTasks(searchTerm) {
+            fetch('search_tasks.php?search=' + encodeURIComponent(searchTerm))
+                .then(response => response.json())
+                .then(tasks => {
+                    updateTasksTable(tasks);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        
+        // Function to update the tasks table
+        function updateTasksTable(tasks) {
+            const tbody = document.querySelector('table tbody');
+            if (!tbody) return;
+            
+            if (tasks.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Tidak ada tugas</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            tasks.forEach(task => {
+                html += `
+                    <tr>
+                        <td>${task.no}</td>
+                        <td>${task.judul}</td>
+                        <td>${task.deskripsi}</td>
+                        <td>
+                            <form method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="${task.id}">
+                                <input type="hidden" name="current_status" value="${task.status}">
+                                <button type="submit" name="change_status" class="${task.status === 'Selesai' ? 'status-done' : 'status-pending'}">
+                                    ${task.status}
+                                </button>
+                            </form>
+                        </td>
+                        <td>${task.tanggal_mulai}</td>
+                        <td>${task.tanggal_selesai}</td>
+                        <td>
+                            <button class="btn btn-edit" onclick="openEditModal(${task.id}, '${task.judul}', '${task.deskripsi}', '${task.status}', '${task.tanggal_mulai}', '${task.tanggal_selesai}')">Edit</button>
+                            <button class="btn btn-delete" onclick="openDeleteModal(${task.id}, '${task.judul}')">Hapus</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+        
         // Get the buttons that open the modals
         var addBtn = document.getElementById("openAddModal");
         

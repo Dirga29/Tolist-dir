@@ -46,13 +46,44 @@ body {
     margin: 0 15px;
 }
 
-.search-bar input {
+.search-bar form {
+    display: flex;
+    gap: 10px;
     width: 100%;
+}
+
+.search-bar input {
+    flex-grow: 1;
     padding: 8px 15px;
     border-radius: 20px;
     border: none;
     background-color: rgba(255, 255, 255, 0.3);
     color: white;
+    font-size: 14px;
+}
+
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-bar input:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.search-btn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 14px;
+}
+
+.search-btn:hover {
+    background-color: #2980b9;
 }
 
 .title {
